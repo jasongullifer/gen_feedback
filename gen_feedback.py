@@ -1,3 +1,12 @@
+# Generate student feedback sheets (for Omnivox/Lea). Omnivox expects the
+# student ID numbers to be contained in the filename. This program uses a
+# delimited text file containing student names and ids to create the text
+# feedback files. It can also instead create multiple copies of a template file,
+# following the naming conventions (e.g., for making copies of a rubric that can
+# be uploaded as  student feebdack). 
+
+# Jason Gullifer
+
 import csv
 import os
 import sys
@@ -5,7 +14,7 @@ import shutil
 
 def readStudents(txt_file = "", delimiter=","):
 	"""
-	Read students from a tab-delimited text file (txt_file).
+	Read students from a text file (txt_file) w/ delimiters (delimiter).
 	"""
 	with open(txt_file, newline = '') as students_file:
 		student_reader = csv.reader(students_file, delimiter=delimiter)
@@ -20,7 +29,7 @@ def readStudents(txt_file = "", delimiter=","):
 	return students
 
 def readHeadings(txt_file = ""):
-	""" Reads a file that contains text to be placed inside the text files (such
+	""" Reads a file that contains text to be placed inside the generated text files (such
 	as assignment headings / parts)."""
 	with open(txt_file, newline = "") as headings_file:
 		lines = headings_file.readlines()	
@@ -43,7 +52,7 @@ def tryDir(assg):
 
 def writeStudentSheets(students, assg, headings):
 	"""
-	Write individual student sheets for each studend (from students argument).
+	Write individual student sheets for each student (from students argument).
 	The sheets are output to the assg directory.
 	"""
 	
@@ -91,7 +100,7 @@ if __name__ == "__main__":
 	overwriting existing sheets.
 	"""
 
-	prog_mode = input("(1) Generate feedback text files; (2) Copy feedback from a template file?; or (Q) to quit: ")
+	prog_mode = input("(1) Generate feedback text files; (2) Make copies of a template file (e.g., PDF)?; or (Q) to quit: ")
 
 	while prog_mode != "Q" and prog_mode != "q":
 		txt_file = input("Enter the full path for the student text file: ")
@@ -104,7 +113,7 @@ if __name__ == "__main__":
 		elif (prog_mode == "1"):
 			headings = input("Enter the full path for the headings file or leave blank: ")
 			if headings != '':
-				headings = readHeadings("./student_files/parts.txt")
+				headings = readHeadings(headings)
 			writeStudentSheets(students, assg, headings)
 		elif (prog_mode == "2"):
 			templateFile = input("Enter the full path for the feedback template file: ")
